@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
         '/homescreen':(context)=>HomeScreen(),
         '/newtodo':(context)=>NewTodo(),
       },
+      debugShowCheckedModeBanner: false,
     );
   }
 }

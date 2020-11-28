@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/provider.dart';
 
 class NewTodo extends StatefulWidget {
   @override
@@ -15,6 +17,7 @@ class _NewTodoState extends State<NewTodo> {
   bool isTime = false;
   final tstyle = TextStyle(fontSize: 19, fontWeight: FontWeight.w600);
   final titleController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
@@ -24,7 +27,9 @@ class _NewTodoState extends State<NewTodo> {
     final width = (mediaQuery.size.width -
             (mediaQuery.padding.left + mediaQuery.padding.right)) /
         100;
+    final provider = Provider.of<TodoProvider>(context, listen: false);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Add an entry'),
       ),
@@ -33,12 +38,24 @@ class _NewTodoState extends State<NewTodo> {
         padding: EdgeInsets.all(width),
         child: Column(
           children: [
-            TextFormField(
-              decoration: InputDecoration(labelText: 'Title'),
-              controller: titleController,
+            Form(
+              // ignore: deprecated_member_use
+              autovalidate: true,
+              key: _formKey,
+              child: TextFormField(
+                decoration: InputDecoration(labelText: 'Title'),
+                controller: titleController,
+                validator: (String text) {
+                  if (text.length > 30) {
+                    return 'Too lengthy';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
             ),
             SizedBox(
-              height: height * 4,
+              height: height * 5,
             ),
             Row(
               children: [
@@ -59,7 +76,7 @@ class _NewTodoState extends State<NewTodo> {
                         firstDate: DateTime.now());
                     setState(() {
                       pickedDate = date;
-                      isDate = true;
+                      if (date != null) isDate = true;
                     });
                   },
                   icon: Icon(Icons.calendar_today_outlined),
@@ -69,7 +86,7 @@ class _NewTodoState extends State<NewTodo> {
               ],
             ),
             SizedBox(
-              height: height * 4,
+              height: height * 5,
             ),
             Row(
               children: [
@@ -92,14 +109,30 @@ class _NewTodoState extends State<NewTodo> {
                           now.day, now.month, now.year, time.hour, time.minute);
                       setState(() {
                         pickedTime = t;
-                        isTime = true;
+                        if (t != null) isTime = true;
                       });
                     },
                     icon: Icon(Icons.alarm),
                     label: Text('Pick a Time'),
                     color: Colors.amberAccent)
               ],
-            )
+            ),
+            SizedBox(height: height * 10),
+            RaisedButton.icon(
+                padding: EdgeInsets.symmetric(
+                    horizontal: width * 20, vertical: height * 2),
+                color: Colors.amber,
+                onPressed: () {
+                  if (titleController.text.length <= 30) {
+                    provider.addTodo(Todo(
+                        date: pickedDate,
+                        time: pickedTime,
+                        title: titleController.text));
+                    //Navigator.of(context).pop();
+                  }
+                },
+                icon: Icon(Icons.save),
+                label: Text('Save'))
           ],
         ),
       ),
