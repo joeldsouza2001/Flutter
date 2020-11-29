@@ -63,8 +63,8 @@ class TodoProvider with ChangeNotifier {
     //_todo.sort((a, b) => a.time.compareTo(b.time));
     //print(_dates);
     //print(_todo);
-    print(map);
-    print(_dates);
+    //print(map);
+    //print(_dates);
     //print(map['November 27, 2020'].length);
     notifyListeners();
   }

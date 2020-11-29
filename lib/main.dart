@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         '/newtodo':(context)=>NewTodo(),
       },
       debugShowCheckedModeBanner: false,
+      
     );
   }
 }

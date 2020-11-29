@@ -19,7 +19,7 @@ class TodoList extends StatelessWidget {
     //print('$height | $width');
     return provider.dates.length == 0
         ? Center(
-            child: Text('Nothing to Display'),
+            child: Text('Nothing to Display',style: TextStyle(fontFamily: 'carterOne',fontSize: 25),),
           )
         : ListView.builder(
             itemCount: provider.dates.length,
@@ -40,7 +40,7 @@ class TodoList extends StatelessWidget {
                       itemCount: provider.map[provider.dates[index1]].length,
                       itemBuilder: (context, index2) => Container(
                             margin: EdgeInsets.all(5),
-                            color: Colors.yellow,
+                            color: Color.fromRGBO(242, 211, 152,1),
                             child: ListTile(
                                 leading: Text(
                                   DateFormat.jm().format(provider
