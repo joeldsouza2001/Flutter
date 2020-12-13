@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:todo_app/provider.dart';
 import './todo_list.dart';
+import './dbhelper.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -8,15 +10,23 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void initState() {
+    TodoProvider().init();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(232, 235, 247,1),
+      backgroundColor: Color.fromRGBO(232, 235, 247, 1),
       appBar: AppBar(
-        title: Text('ToDo App',style: TextStyle(fontFamily: 'carterOne'),),
-        backgroundColor: Color.fromRGBO(222, 26, 26,1),
+        title: Text(
+          'ToDo App',
+          style: TextStyle(fontFamily: 'carterOne'),
+        ),
+        backgroundColor: Color.fromRGBO(222, 26, 26, 1),
       ),
       body: SafeArea(
-        
           child: Container(
         padding: EdgeInsets.all(5),
         margin: EdgeInsets.all(5),
@@ -24,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
       )),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        backgroundColor: Color.fromRGBO(215, 133, 33,1),
+        backgroundColor: Color.fromRGBO(215, 133, 33, 1),
         foregroundColor: Colors.white,
         onPressed: () {
           Navigator.pushNamed(context, '/newtodo');

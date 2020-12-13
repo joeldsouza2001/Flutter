@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/provider.dart';
+import './dbhelper.dart';
 
 class NewTodo extends StatefulWidget {
   @override
@@ -48,8 +51,18 @@ class _NewTodoState extends State<NewTodo> {
                 autovalidate: true,
                 key: _formKey,
                 child: TextFormField(
+                  cursorColor: Color.fromRGBO(222, 26, 26, 1),
                   decoration: InputDecoration(
-                      labelText: 'Title', focusColor: Colors.amber),
+                      labelText: 'Title',
+                      focusColor: Colors.amber,
+                      labelStyle:
+                          TextStyle(color: Color.fromRGBO(222, 26, 26, 1)),
+                      border: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(222, 26, 26, 1))),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Color.fromRGBO(222, 26, 26, 1)))),
                   controller: titleController,
                   validator: (String text) {
                     if (text.length > 30) {
@@ -80,17 +93,20 @@ class _NewTodoState extends State<NewTodo> {
                   RaisedButton.icon(
                     onPressed: () async {
                       date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          lastDate: DateTime(DateTime.now().year + 1),
-                          firstDate: DateTime.now(),
-                          builder:(context,child)=>Theme(data: ThemeData.light().copyWith(
-                            //primaryColor: Colors.red,
-                            //accentColor: Color.fromRGBO(215, 133, 33, 1),
-                            colorScheme: ColorScheme.light(primary:  Color.fromRGBO(222, 26, 26, 1),)
-                            
-                          ),child: child,),
-                          );
+                        context: context,
+                        initialDate: DateTime.now(),
+                        lastDate: DateTime(DateTime.now().year + 1),
+                        firstDate: DateTime.now(),
+                        builder: (context, child) => Theme(
+                          data: ThemeData.light().copyWith(
+                              //primaryColor: Colors.red,
+                              //accentColor: Color.fromRGBO(215, 133, 33, 1),
+                              colorScheme: ColorScheme.light(
+                            primary: Color.fromRGBO(222, 26, 26, 1),
+                          )),
+                          child: child,
+                        ),
+                      );
                       if (date == null) return;
                       setState(() {
                         pickedDate = date;
@@ -127,13 +143,17 @@ class _NewTodoState extends State<NewTodo> {
                   RaisedButton.icon(
                     onPressed: () async {
                       time = await showTimePicker(
-                          context: context, initialTime: TimeOfDay.now(),
-                          builder: (context,child)=>Theme(data: ThemeData.light().copyWith(
-                            //primaryColor: Colors.red,
-                            //accentColor: Color.fromRGBO(215, 133, 33, 1),
-                            colorScheme: ColorScheme.light(primary:  Color.fromRGBO(222, 26, 26, 1),)
-                            
-                          ),child: child,));
+                          context: context,
+                          initialTime: TimeOfDay.now(),
+                          builder: (context, child) => Theme(
+                                data: ThemeData.light().copyWith(
+                                    //primaryColor: Colors.red,
+                                    //accentColor: Color.fromRGBO(215, 133, 33, 1),
+                                    colorScheme: ColorScheme.light(
+                                  primary: Color.fromRGBO(222, 26, 26, 1),
+                                )),
+                                child: child,
+                              ));
                       if (time == null) return;
                       DateTime now = DateTime.now();
                       DateTime t = DateTime(
@@ -162,7 +182,15 @@ class _NewTodoState extends State<NewTodo> {
                             Text('Add a title', textAlign: TextAlign.center),
                         backgroundColor: Color.fromRGBO(215, 133, 33, 1),
                       ));
-                    } else if (pickedDate == null || pickedTime == null) {
+                    } else if (pickedDate == null ||
+                        pickedTime == null ||
+                        DateTime(
+                                pickedDate.year,
+                                pickedDate.month,
+                                pickedDate.day,
+                                pickedTime.hour,
+                                pickedTime.minute)
+                            .isBefore(DateTime.now())) {
                       Scaffold.of(context).hideCurrentSnackBar();
                       Scaffold.of(context).showSnackBar(SnackBar(
                         content: Text('Select a valid date and time',
@@ -178,15 +206,24 @@ class _NewTodoState extends State<NewTodo> {
                         backgroundColor: Color.fromRGBO(215, 133, 33, 1),
                       ));
                     } else {
+                      DateTime dt = DateTime(
+                          pickedDate.year,
+                          pickedDate.month,
+                          pickedDate.day,
+                          pickedTime.hour,
+                          pickedTime.minute);
+                      String time = DateFormat().add_jm().format(dt);
+                      String date = DateFormat.yMMMMd('en_US').format(dt);
+
                       provider.addTodo(Todo(
-                          date: pickedDate,
-                          time: pickedTime,
+                          date: date,
+                          time: time,
                           title: titleController.text));
-                      Navigator.of(context).pop();
+                      //Navigator.of(context).pop();
                     }
                   },
                   icon: Icon(Icons.save),
-                  label: Text('Save'))
+                  label: Text('Save')),
             ],
           ),
         ),
