@@ -212,14 +212,14 @@ class _NewTodoState extends State<NewTodo> {
                           pickedDate.day,
                           pickedTime.hour,
                           pickedTime.minute);
-                      String time = DateFormat().add_jm().format(dt);
-                      String date = DateFormat.yMMMMd('en_US').format(dt);
+                      //String time = DateFormat().add_jm().format(dt);
+                      //String date = DateFormat.yMMMMd('en_US').format(dt);
 
                       provider.addTodo(Todo(
-                          date: date,
-                          time: time,
+                          datetime: dt,
+                          //time: time,
                           title: titleController.text));
-                      //Navigator.of(context).pop();
+                      Navigator.of(context).pop();
                     }
                   },
                   icon: Icon(Icons.save),
