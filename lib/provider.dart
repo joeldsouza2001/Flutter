@@ -52,15 +52,23 @@ class TodoProvider with ChangeNotifier {
     List<DateTime> dates0 = [];
     final List<Map<String, dynamic>> list1 =
         await DBhelper.instance.querydates();
+    //print(list1);
     list1.forEach((element) {
       DateTime dt = DateTime.parse(element['date']);
       if (dates0.contains(DateTime.utc(dt.year, dt.month, dt.day, 0, 0, 0)) ==
           false) {
         dates0.add(DateTime.utc(dt.year, dt.month, dt.day, 0, 0, 0));
       }
+      /*else {
+         DBhelper.instance.deletedateentry(element['id'], null);
+      }*/
     });
     dates0.sort((a, b) => a.compareTo(b));
     _dates = dates0;
+    print(' list0: $list0');
+    print('list1 $list1');
+    print('map $_map');
+    print('dates $_dates');
   }
 
   void addTodo(Todo todo) async {
@@ -87,17 +95,11 @@ class TodoProvider with ChangeNotifier {
       map_[todo.date] = tempList;
     }*/
 
- 
-    await DBhelper.instance.insert({
-      'datetime': todo.datetime.toIso8601String(),
-      'title': todo.title
-    }, {
-      'date': DateTime.utc(todo.datetime.year, todo.datetime.month,
-              todo.datetime.day, 0, 0, 0)
-          .toIso8601String()
-    });
+    await DBhelper.instance.insert(
+        {'datetime': todo.datetime.toString(), 'title': todo.title},
+        {'date': todo.datetime.toString()});
 
-    if (_map.containsKey(DateFormat.yMMMMd('en_US').format(todo.datetime)) ==
+    /*if (_map.containsKey(DateFormat.yMMMMd('en_US').format(todo.datetime)) ==
         false) {
       _map.putIfAbsent(DateFormat.yMMMMd('en_US').format(todo.datetime),
           () => [Todo(datetime: todo.datetime, title: todo.title)]);
@@ -113,19 +115,30 @@ class TodoProvider with ChangeNotifier {
       _dates.add(DateTime.utc(
           todo.datetime.year, todo.datetime.month, todo.datetime.day, 0, 0, 0));
     }
-    _dates.sort((a, b) => a.compareTo(b));
+    _dates.sort((a, b) => a.compareTo(b));*/
+    await fetchdata();
     notifyListeners();
   }
 
-  void deleteTodo(int ind1, int ind2) {
-    List temp = map[dates[ind1]];
-    temp.removeAt(ind2);
-    // map[dates[ind1]] = temp;
-    if (temp.length == 0) {
-      map.removeWhere((key, value) => key == dates[ind1]);
+  void deleteTodo(int ind1, int ind2) async {
+    List temp = _map[DateFormat.yMMMMd('en_US').format(dates[ind1])];
+    //print('temp:${temp[ind2].datetime}');
+    //print(temp);
+    var delmap = await DBhelper.instance.deletemapentry(temp[ind2]);
+    //print('delmap:$delmap');
+    var deldate = await DBhelper.instance.deletedateentry(temp[ind2]);
+    //print('deldate:$deldate');
+    //temp.removeAt(ind2);
+    //print(temp);
+    //map[DateFormat.yMMMMd('en_US').format(dates[ind1])] = temp;
+
+    /*if (temp.length == 0) {
+      map.removeWhere((key, value) =>
+          key == (DateFormat.yMMMMd('en_US').format(dates[ind1])));
       _dates.removeAt(ind1);
       notifyListeners();
-    }
+    }*/
+    await fetchdata();
     notifyListeners();
   }
 }

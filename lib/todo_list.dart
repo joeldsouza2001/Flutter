@@ -11,7 +11,7 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> {
   @override
   void initState() {
-    Provider.of<TodoProvider>(context,listen: false).fetchdata().then((_) =>setState((){}));
+    Provider.of<TodoProvider>(context,listen: false).fetchdata();
     super.initState();
   }
 

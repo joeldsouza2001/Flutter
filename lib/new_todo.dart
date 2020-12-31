@@ -95,7 +95,7 @@ class _NewTodoState extends State<NewTodo> {
                       date = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
-                        lastDate: DateTime(DateTime.now().year + 1),
+                        lastDate: DateTime(DateTime.now().year + 2),
                         firstDate: DateTime.now(),
                         builder: (context, child) => Theme(
                           data: ThemeData.light().copyWith(
@@ -224,6 +224,7 @@ class _NewTodoState extends State<NewTodo> {
                   },
                   icon: Icon(Icons.save),
                   label: Text('Save')),
+                  RaisedButton.icon(onPressed:()=>DBhelper.instance.deleteall(), icon: Icon(Icons.delete), label:Text('Delete'))
             ],
           ),
         ),

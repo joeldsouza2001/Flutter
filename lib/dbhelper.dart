@@ -2,6 +2,8 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:path/path.dart';
+import './provider.dart';
+
 
 class DBhelper {
   DBhelper._privateConstructor();
@@ -36,6 +38,11 @@ class DBhelper {
     //String path = join(directory.path, 'my_db.db');
     //await deleteDatabase(path);
   }
+  Future deleteall() async{
+    Database db = await instance.database;
+    await db.delete('todo_list');
+    await db.delete('dates');
+  }
 
   Future<List<Map<String, dynamic>>> querytodolist() async {
     Database db = await instance.database;
@@ -45,5 +52,23 @@ class DBhelper {
   Future<List<Map<String, dynamic>>> querydates() async {
     Database db = await instance.database;
     return await db.query('dates');
+  }
+
+  Future<int> deletemapentry(Todo todo) async {
+    //print('${todo.datetime}||${todo.title}');
+    /*print(new DateTime.now().toString());
+    print(new DateTime.now().toString());*/
+    Database db = await instance.database;
+    return await db.delete('todo_list',
+        where: 'datetime=? AND title=?',
+        whereArgs: [todo.datetime.toString(),todo.title]);
+    
+  }
+
+  Future<int> deletedateentry(Todo todo) async {
+    Database db = await instance.database;
+
+    return await db.delete('dates',
+        where: 'date=?', whereArgs: [todo.datetime.toString()]);
   }
 }
