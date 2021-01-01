@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app/provider.dart';
 import './todo_list.dart';
-import './dbhelper.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -9,7 +7,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

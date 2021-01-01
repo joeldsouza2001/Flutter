@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -47,7 +45,6 @@ class _NewTodoState extends State<NewTodo> {
           child: Column(
             children: [
               Form(
-                // ignore: deprecated_member_use
                 autovalidate: true,
                 key: _formKey,
                 child: TextFormField(
@@ -99,8 +96,6 @@ class _NewTodoState extends State<NewTodo> {
                         firstDate: DateTime.now(),
                         builder: (context, child) => Theme(
                           data: ThemeData.light().copyWith(
-                              //primaryColor: Colors.red,
-                              //accentColor: Color.fromRGBO(215, 133, 33, 1),
                               colorScheme: ColorScheme.light(
                             primary: Color.fromRGBO(222, 26, 26, 1),
                           )),
@@ -147,8 +142,6 @@ class _NewTodoState extends State<NewTodo> {
                           initialTime: TimeOfDay.now(),
                           builder: (context, child) => Theme(
                                 data: ThemeData.light().copyWith(
-                                    //primaryColor: Colors.red,
-                                    //accentColor: Color.fromRGBO(215, 133, 33, 1),
                                     colorScheme: ColorScheme.light(
                                   primary: Color.fromRGBO(222, 26, 26, 1),
                                 )),
@@ -212,19 +205,15 @@ class _NewTodoState extends State<NewTodo> {
                           pickedDate.day,
                           pickedTime.hour,
                           pickedTime.minute);
-                      //String time = DateFormat().add_jm().format(dt);
-                      //String date = DateFormat.yMMMMd('en_US').format(dt);
 
                       provider.addTodo(Todo(
                           datetime: dt,
-                          //time: time,
                           title: titleController.text));
                       Navigator.of(context).pop();
                     }
                   },
                   icon: Icon(Icons.save),
                   label: Text('Save')),
-                  RaisedButton.icon(onPressed:()=>DBhelper.instance.deleteall(), icon: Icon(Icons.delete), label:Text('Delete'))
             ],
           ),
         ),

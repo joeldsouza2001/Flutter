@@ -16,12 +16,8 @@ class _TodoListState extends State<TodoList> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     final provider = Provider.of<TodoProvider>(context);
-    final list = provider.dates;
-    //print('list:$list');
-    //print(provider.map['2020-11-25T19:37:49.359931'][0]);
-    //print(DateFormat().add_yMd().add_jm().format(DateTime.parse('2020-11-24T21:42:27.390176'))  );
     final mediaQuery = MediaQuery.of(context);
     final height = (mediaQuery.size.height -
             (mediaQuery.padding.top + mediaQuery.padding.bottom)) /
@@ -29,10 +25,9 @@ class _TodoListState extends State<TodoList> {
     final width = (mediaQuery.size.width -
             (mediaQuery.padding.left + mediaQuery.padding.right)) /
         100;
-    //print('$height | $width');
     return FutureBuilder(
-        future: provider.fetchdata(),
-        builder: (context, snaphot) => provider.dates.length == 0
+        future: provider.fetchdata().then((value) => null),
+        builder: (context, snaphot) =>provider.dates.length == 0
             ? Center(
                 child: Text(
                   'Nothing to Display',
@@ -44,22 +39,19 @@ class _TodoListState extends State<TodoList> {
                 itemBuilder: (context, index1) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(DateFormat.yMMMMd('en_US').format(list[index1]),
+                    Text(DateFormat.yMMMMd('en_US').format(provider.dates[index1]),
                         style: TextStyle(
                           fontFamily: 'carterOne',
                         )),
                     Container(
-                      //height: 100,
-                      //padding: EdgeInsets.all(5),
-                      //color: Colors.yellowAccent,
-
                       child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: provider.map[DateFormat.yMMMMd('en_US').format(list[index1])].length,
+                          itemCount: provider.map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])].length,
                           itemBuilder: (context, index2) => Dismissible(
-                                key: Key(provider
-                                    .map[DateFormat.yMMMMd('en_US').format(list[index1])][index2].datetime
-                                    .toString()),
+                                key: Key("${provider
+                                    .map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])][index2].datetime} ${provider
+                                    .map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])][index2].title}"
+                                    ),
                                 background: Container(
                                   padding: EdgeInsets.only(left: 15),
                                   margin: EdgeInsets.all(5),
@@ -78,18 +70,17 @@ class _TodoListState extends State<TodoList> {
                                   margin: EdgeInsets.all(5),
                                   color: Color.fromRGBO(242, 211, 152, 1),
                                   child: ListTile(
-                                      leading: Text(DateFormat().add_jm().format(provider.map[DateFormat.yMMMMd('en_US').format(list[index1])][index2].datetime),
+                                      leading: Text(DateFormat().add_jm().format(provider.map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])][index2].datetime),
                                         style:
                                             TextStyle(fontFamily: 'carterOne'),
                                       ),
-                                      title: Text(provider.map[DateFormat.yMMMMd('en_US').format(list[index1])][index2].title,
+                                      title: Text(provider.map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])][index2].title,
                                         textAlign: TextAlign.center,
                                         style:
                                             TextStyle(fontFamily: 'carterOne'),
                                       )),
                                 ),
                               )
-                          //Text(DateFormat.jm().format(provider.map[provider.dates[index1]][index2].time)),
                           ),
                     )
                   ],
