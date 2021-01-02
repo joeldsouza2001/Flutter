@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:path/path.dart';
 import './provider.dart';
 
-
 class DBhelper {
   DBhelper._privateConstructor();
   static final DBhelper instance = DBhelper._privateConstructor();
@@ -21,33 +20,25 @@ class DBhelper {
       onCreate: (db, version) async {
         await db.execute(
             'create table todo_list(id integer primary key,datetime text,title text)');
-        await db
-            .execute('create table dates(id integer primary key,date text)');
       },
     );
     return _database;
   }
 
-  Future<int> insert(Map<String, String> map, date) async {
+  Future<int> insert(Map<String, String> map) async {
     Database db = await instance.database;
-    await db.insert('dates', date);
     return await db.insert('todo_list', map);
+  }
 
   Future<List<Map<String, dynamic>>> querytodolist() async {
     Database db = await instance.database;
     return await db.query('todo_list');
   }
 
-  Future<List<Map<String, dynamic>>> querydates() async {
-    Database db = await instance.database;
-    return await db.query('dates');
-  }
-
   Future<int> deletemapentry(Todo todo) async {
     Database db = await instance.database;
     return await db.delete('todo_list',
         where: 'datetime=? AND title=?',
-        whereArgs: [todo.datetime.toString(),todo.title]);
-    
+        whereArgs: [todo.datetime.toString(), todo.title]);
   }
 }

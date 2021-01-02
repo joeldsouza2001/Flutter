@@ -11,12 +11,12 @@ class TodoList extends StatefulWidget {
 class _TodoListState extends State<TodoList> {
   @override
   void initState() {
-    Provider.of<TodoProvider>(context,listen: false).fetchdata();
+    Provider.of<TodoProvider>(context, listen: false).fetchdata();
     super.initState();
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     final provider = Provider.of<TodoProvider>(context);
     final mediaQuery = MediaQuery.of(context);
     final height = (mediaQuery.size.height -
@@ -27,7 +27,7 @@ class _TodoListState extends State<TodoList> {
         100;
     return FutureBuilder(
         future: provider.fetchdata().then((value) => null),
-        builder: (context, snaphot) =>provider.dates.length == 0
+        builder: (context, snaphot) => provider.dates.length == 0
             ? Center(
                 child: Text(
                   'Nothing to Display',
@@ -39,19 +39,22 @@ class _TodoListState extends State<TodoList> {
                 itemBuilder: (context, index1) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(DateFormat.yMMMMd('en_US').format(provider.dates[index1]),
+                    Text(
+                        DateFormat.yMMMMd('en_US')
+                            .format(provider.dates[index1]),
                         style: TextStyle(
                           fontFamily: 'carterOne',
                         )),
                     Container(
                       child: ListView.builder(
                           shrinkWrap: true,
-                          itemCount: provider.map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])].length,
+                          itemCount: provider
+                              .map[DateFormat.yMMMMd('en_US')
+                                  .format(provider.dates[index1])]
+                              .length,
                           itemBuilder: (context, index2) => Dismissible(
-                                key: Key("${provider
-                                    .map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])][index2].datetime} ${provider
-                                    .map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])][index2].title}"
-                                    ),
+                                key: Key(
+                                    "${provider.map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])][index2].datetime} ${provider.map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])][index2].title}"),
                                 background: Container(
                                   padding: EdgeInsets.only(left: 15),
                                   margin: EdgeInsets.all(5),
@@ -70,18 +73,29 @@ class _TodoListState extends State<TodoList> {
                                   margin: EdgeInsets.all(5),
                                   color: Color.fromRGBO(242, 211, 152, 1),
                                   child: ListTile(
-                                      leading: Text(DateFormat().add_jm().format(provider.map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])][index2].datetime),
+                                      leading: Text(
+                                        DateFormat().add_jm().format(provider
+                                            .map[DateFormat.yMMMMd('en_US')
+                                                    .format(
+                                                        provider.dates[index1])]
+                                                [index2]
+                                            .datetime),
                                         style:
                                             TextStyle(fontFamily: 'carterOne'),
                                       ),
-                                      title: Text(provider.map[DateFormat.yMMMMd('en_US').format(provider.dates[index1])][index2].title,
+                                      title: Text(
+                                        provider
+                                            .map[DateFormat.yMMMMd('en_US')
+                                                    .format(
+                                                        provider.dates[index1])]
+                                                [index2]
+                                            .title,
                                         textAlign: TextAlign.center,
                                         style:
                                             TextStyle(fontFamily: 'carterOne'),
                                       )),
                                 ),
-                              )
-                          ),
+                              )),
                     )
                   ],
                 ),

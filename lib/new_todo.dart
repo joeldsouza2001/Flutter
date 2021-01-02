@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_app/provider.dart';
-import './dbhelper.dart';
 
 class NewTodo extends StatefulWidget {
   @override
@@ -92,7 +91,7 @@ class _NewTodoState extends State<NewTodo> {
                       date = await showDatePicker(
                         context: context,
                         initialDate: DateTime.now(),
-                        lastDate: DateTime(DateTime.now().year + 2),
+                        lastDate: DateTime(DateTime.now().year + 1),
                         firstDate: DateTime.now(),
                         builder: (context, child) => Theme(
                           data: ThemeData.light().copyWith(

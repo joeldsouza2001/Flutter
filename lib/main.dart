@@ -18,11 +18,10 @@ class MyApp extends StatelessWidget {
       title: 'Todo App',
       home: HomeScreen(),
       routes: {
-        '/homescreen':(context)=>HomeScreen(),
-        '/newtodo':(context)=>NewTodo(),
+        '/homescreen': (context) => HomeScreen(),
+        '/newtodo': (context) => NewTodo(),
       },
       debugShowCheckedModeBanner: false,
     );
   }
 }
-

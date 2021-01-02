@@ -6,10 +6,7 @@ class Todo {
   final String title;
   final DateTime datetime;
   bool done;
-  Todo(
-      {@required this.datetime,
-      @required this.title,
-      this.done});
+  Todo({@required this.datetime, @required this.title, this.done});
 }
 
 class TodoProvider with ChangeNotifier {
@@ -19,10 +16,10 @@ class TodoProvider with ChangeNotifier {
   Map<String, List<Todo>> get map => _map;
 
   Future fetchdata() async {
-    final List<Map<String, dynamic>> list0 =
+    final List<Map<String, dynamic>> fetchedList =
         await DBhelper.instance.querytodolist();
     Map<String, List<Todo>> map0 = {};
-    list0.forEach((ele) {
+    fetchedList.forEach((ele) {
       if (map0.containsKey(DateFormat.yMMMMd('en_US')
               .format(DateTime.parse(ele['datetime']))) ==
           false) {
@@ -46,9 +43,7 @@ class TodoProvider with ChangeNotifier {
       _map = map0;
     });
     List<DateTime> dates0 = [];
-    final List<Map<String, dynamic>> list1 =
-        await DBhelper.instance.querydates();
-    list0.forEach((element) {
+    fetchedList.forEach((element) {
       DateTime dt = DateTime.parse(element['datetime']);
       if (dates0.contains(DateTime.utc(dt.year, dt.month, dt.day, 0, 0, 0)) ==
           false) {
@@ -60,9 +55,8 @@ class TodoProvider with ChangeNotifier {
   }
 
   void addTodo(Todo todo) async {
-    await DBhelper.instance.insert(
-        {'datetime': todo.datetime.toString(), 'title': todo.title},
-        {'date': todo.datetime.toString()});
+    await DBhelper.instance
+        .insert({'datetime': todo.datetime.toString(), 'title': todo.title});
     await fetchdata();
     notifyListeners();
   }
